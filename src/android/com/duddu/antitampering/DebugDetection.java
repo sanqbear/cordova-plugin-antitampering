@@ -2,6 +2,7 @@ package com.duddu.antitampering;
 
 import android.os.Debug;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 
 import java.lang.reflect.Field;
 
@@ -12,6 +13,8 @@ class DebugDetection {
         if (hasDebuggerAttached()) {
             throw new Exception("Debugger attached");
         } else if (getDebugField(context)) {
+            throw new Exception("App running in Debug mode");
+        } else if (isAppDebuggable(context)) {
             throw new Exception("App running in Debug mode");
         }
     }
@@ -26,4 +29,10 @@ class DebugDetection {
         return Debug.isDebuggerConnected() || Debug.waitingForDebugger();
     }
 
+    private static boolean isAppDebuggable(Context context) {
+        if (context == null) {
+            return false;
+        }
+        return (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+    }
 }
