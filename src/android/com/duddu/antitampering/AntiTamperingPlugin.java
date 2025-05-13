@@ -25,7 +25,7 @@ public class AntiTamperingPlugin extends CordovaPlugin {
     private void checkAndStopExecution() {
         try {
             AssetsIntegrity.check(activity.getAssets());
-            DebugDetection.check(activity.getPackageName());
+            DebugDetection.check(activity.getApplicationContext());
         } catch (final Exception e) {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run () {
@@ -44,7 +44,7 @@ public class AntiTamperingPlugin extends CordovaPlugin {
                 public void run () {
                     PluginResult result;
                     try {
-                        DebugDetection.check(activity.getPackageName());
+                        DebugDetection.check(activity.getApplicationContext());
                         JSONObject response = new JSONObject();
                         response.put("assets", AssetsIntegrity.check(activity.getAssets()));
                         result = new PluginResult(PluginResult.Status.OK, response);
