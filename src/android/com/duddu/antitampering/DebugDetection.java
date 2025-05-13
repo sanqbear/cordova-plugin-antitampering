@@ -20,9 +20,16 @@ class DebugDetection {
     }
 
     private static Boolean getDebugField(Context context) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        Class<?> buildConfigClass = Class.forName(context.getPackageName().concat(".BuildConfig"));
-        Field debugField = buildConfigClass.getField("DEBUG");
-        return debugField.getBoolean(null);
+        if (context == null) {
+            return false;
+        }
+        try {
+            Class<?> buildConfigClass = Class.forName(context.getPackageName().concat(".BuildConfig"));
+            Field debugField = buildConfigClass.getField("DEBUG");
+            return debugField.getBoolean(null);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static Boolean hasDebuggerAttached() {
